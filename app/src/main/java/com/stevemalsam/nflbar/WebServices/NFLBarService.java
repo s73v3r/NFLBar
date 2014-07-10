@@ -4,6 +4,7 @@ import com.stevemalsam.nflbar.Models.Venue;
 
 import java.util.List;
 
+import retrofit.Callback;
 import retrofit.http.GET;
 
 /**
@@ -13,5 +14,5 @@ public interface NFLBarService {
     public static final String URL = "https://s3.amazonaws.com";
 
     @GET("/jon-hancock-phunware/nflapi-static.json")
-    List<Venue> listVenues();
+    void listVenues(Callback<List<Venue>> cb);
 }
