@@ -5,9 +5,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Picasso;
+import com.stevemalsam.nflbar.Models.Venue;
+import com.stevemalsam.nflbar.Models.VenueStore;
 import com.stevemalsam.nflbar.dummy.DummyContent;
 
 /**
@@ -26,7 +30,11 @@ public class VenueDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Venue mItem;
+    private ImageView mVenueImage;
+    private TextView mVenueName;
+    private TextView mVenueAddress;
+    private TextView mVenueCity;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,10 +48,7 @@ public class VenueDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = VenueStore.getInstance().getVenue(getArguments().getInt(ARG_ITEM_ID));
         }
     }
 
@@ -52,11 +57,33 @@ public class VenueDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_venue_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.venue_detail)).setText(mItem.content);
-        }
+        mVenueImage = (ImageView)rootView.findViewById(R.id.venueImage);
+        mVenueName = (TextView)rootView.findViewById(R.id.venueName);
+        mVenueAddress = (TextView)rootView.findViewById(R.id.venueAddress);
+        mVenueCity = (TextView)rootView.findViewById(R.id.venueCity);
+
+
+        updateUI();
 
         return rootView;
+    }
+
+    private void updateUI() {
+        if(mItem.getImageUrl() != null && !mItem.getImageUrl().isEmpty()) {
+            Picasso.with(getActivity()).load(mItem.getImageUrl()).into(mVenueImage);
+        }
+
+        mVenueName.setText(mItem.getName());
+        mVenueAddress.setText(mItem.getAddress());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(mItem.getCity())
+                .append(" ")
+                .append(mItem.getState())
+                .append(", ")
+                .append(mItem.getZip());
+        mVenueCity.setText(sb.toString());
+
+
     }
 }

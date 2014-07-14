@@ -39,8 +39,8 @@ public class VenueDetailActivity extends ActionBarActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(VenueDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(VenueDetailFragment.ARG_ITEM_ID));
+            arguments.putInt(VenueDetailFragment.ARG_ITEM_ID,
+                    getIntent().getIntExtra(VenueDetailFragment.ARG_ITEM_ID, 0));
             VenueDetailFragment fragment = new VenueDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -60,7 +60,8 @@ public class VenueDetailActivity extends ActionBarActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            NavUtils.navigateUpTo(this, new Intent(this, VenueListActivity.class));
+//            NavUtils.navigateUpTo(this, new Intent(this, VenueListActivity.class));
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
