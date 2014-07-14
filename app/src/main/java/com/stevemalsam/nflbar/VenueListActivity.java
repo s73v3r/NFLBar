@@ -3,8 +3,21 @@ package com.stevemalsam.nflbar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.stevemalsam.nflbar.Models.Venue;
+import com.stevemalsam.nflbar.WebServices.NFLBarService;
+//import com.stevemalsam.nflbar.WebServices.NFLBarService;
 
+import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.converter.GsonConverter;
 
 
 /**
@@ -30,12 +43,19 @@ public class VenueListActivity extends FragmentActivity
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+    public List<Venue> mVenues;
+
     private boolean mTwoPane;
+    private NFLBarService nflBarService;
+    private VenueListFragment venueListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_venue_list);
+
+        venueListFragment = ((VenueListFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.venue_list));
 
         if (findViewById(R.id.venue_detail_container) != null) {
             // The detail container view will be present only in the
@@ -49,9 +69,8 @@ public class VenueListActivity extends FragmentActivity
             ((VenueListFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.venue_list))
                     .setActivateOnItemClick(true);
+                    venueListFragment.setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
@@ -59,13 +78,13 @@ public class VenueListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(int id) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(VenueDetailFragment.ARG_ITEM_ID, id);
+            arguments.putInt(VenueDetailFragment.ARG_ITEM_ID, id);
             VenueDetailFragment fragment = new VenueDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

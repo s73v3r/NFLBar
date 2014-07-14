@@ -3,12 +3,19 @@ package com.stevemalsam.nflbar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
-import com.stevemalsam.nflbar.dummy.DummyContent;
+import com.stevemalsam.nflbar.Models.Venue;
+import com.stevemalsam.nflbar.Models.VenueStore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A list fragment representing a list of Venues. This fragment
@@ -37,6 +44,11 @@ public class VenueListFragment extends ListFragment {
      * The current activated item position. Only used on tablets.
      */
     private int mActivatedPosition = ListView.INVALID_POSITION;
+    private List<Venue> mVenues;
+
+    public void setVenues(List<Venue> venues) {
+        this.mVenues = venues;
+    }
 
     /**
      * A callback interface that all activities containing this fragment must
@@ -47,7 +59,7 @@ public class VenueListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(int id);
     }
 
     /**
@@ -56,7 +68,7 @@ public class VenueListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(int id) {
         }
     };
 
@@ -65,18 +77,46 @@ public class VenueListFragment extends ListFragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public VenueListFragment() {
+        mVenues = new ArrayList<Venue>();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        VenueStore.getInstance().getVenues(new VenueStore.VenueListListener() {
+            @Override
+            public void venuesLoaded(List<Venue> venues) {
+                mVenues = venues;
+                setupAdapter();
+            }
+        });
+
+//        setupAdapter();
+    }
+
+    private void setupAdapter() {
+        setListAdapter(new ArrayAdapter<Venue>(
                 getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+                R.layout.venue_cell_layout,
+                R.id.venueName,
+                mVenues) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Venue venue = getItem(position);
+
+                if(convertView == null) {
+                    convertView = LayoutInflater.from(getActivity()).inflate(R.layout.venue_cell_layout, parent, false);
+                }
+                TextView barName = (TextView) convertView.findViewById(R.id.venueName);
+                barName.setText(venue.getName());
+
+                TextView barAddress = (TextView) convertView.findViewById(R.id.venueAddress);
+                barAddress.setText(venue.getAddress());
+
+                return convertView;
+            }
+        });
     }
 
     @Override
@@ -116,7 +156,7 @@ public class VenueListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        mCallbacks.onItemSelected(position);
     }
 
     @Override
