@@ -15,4 +15,7 @@ public interface NFLBarService {
 
     @GET("/jon-hancock-phunware/nflapi-static.json")
     void listVenues(Callback<List<Venue>> cb);
+
+    @GET("/jon-hancock-phunware/nflapi-static.json")
+    List<Venue> listVenues();
 }

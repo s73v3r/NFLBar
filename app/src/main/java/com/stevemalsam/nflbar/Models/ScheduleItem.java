@@ -1,5 +1,8 @@
 package com.stevemalsam.nflbar.Models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,7 +11,12 @@ public class ScheduleItem {
     private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(
             "yyyy-MM-dd HH:mm:ss Z");
 
+    @SerializedName("start_date")
+    @Expose
     private Date mStartDate;
+
+    @SerializedName("end_date")
+    @Expose
     private Date mEndDate;
 
     public ScheduleItem() {
