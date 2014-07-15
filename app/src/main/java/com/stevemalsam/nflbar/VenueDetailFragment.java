@@ -1,8 +1,14 @@
 package com.stevemalsam.nflbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,6 +43,7 @@ public class VenueDetailFragment extends Fragment {
     private TextView mVenueAddress;
     private TextView mVenueCity;
     private ProgressBar mProgressBar;
+    private ShareActionProvider mShareActionProvider;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -52,6 +59,8 @@ public class VenueDetailFragment extends Fragment {
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItem = VenueStore.getInstance().getVenue(getArguments().getInt(ARG_ITEM_ID));
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -108,5 +117,35 @@ public class VenueDetailFragment extends Fragment {
         mVenueCity.setText(sb.toString());
 
 
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Locate MenuItem with ShareActionProvider
+        inflater.inflate(R.menu.menu, menu);
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        mShareActionProvider.setShareIntent(getDefaultIntent());
+        // Return true to display menu
+    }
+
+    private Intent getDefaultIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        StringBuilder sb = new StringBuilder()
+                .append(mItem.getName())
+                .append(" - ")
+                .append(mItem.getAddress())
+                .append(" ")
+                .append(mItem.getCity())
+                .append(" ")
+                .append(mItem.getState())
+                .append(", ")
+                .append(mItem.getZip());
+
+        intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        return intent;
     }
 }
