@@ -3,43 +3,71 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/venueImage"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:scaleType="centerCrop" />
-
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Bar Name"
-        android:id="@+id/venueName"
-        android:layout_below="@+id/venueImage"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id ="@+id/imageLayout">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Bar Address"
-        android:id="@+id/venueAddress"
-        android:layout_below="@+id/venueName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-    <TextView
-        android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/photo_height"
+            android:id="@+id/venueImage"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Bar City"
-        android:id="@+id/venueCity"
-        android:layout_below="@+id/venueAddress"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_width="match_parent"
+        android:layout_below="@id/imageLayout"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/detail_horiz_margin"
+        android:layout_marginRight="@dimen/detail_horiz_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Bar Name"
+            android:id="@+id/venueName"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_below="@+id/venueImage"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Bar Address"
+            android:id="@+id/venueAddress"
+            android:textColor="#6000"
+            android:layout_below="@+id/venueName"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Bar City"
+            android:id="@+id/venueCity"
+            android:textColor="#6000"
+            android:layout_below="@+id/venueAddress"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </LinearLayout>
+
 
 </RelativeLayout>
