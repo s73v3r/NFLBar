@@ -127,7 +127,9 @@ public class VenueDetailFragment extends Fragment {
 
         // Fetch and store ShareActionProvider
         mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-        mShareActionProvider.setShareIntent(getDefaultIntent());
+        if(mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(getDefaultIntent());
+        }
         // Return true to display menu
     }
 
