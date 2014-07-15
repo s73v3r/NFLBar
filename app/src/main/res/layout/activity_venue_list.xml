@@ -4,6 +4,7 @@
     android:name="com.stevemalsam.nflbar.VenueListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     tools:context=".VenueListActivity"
