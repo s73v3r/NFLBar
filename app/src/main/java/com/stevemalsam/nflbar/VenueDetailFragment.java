@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.stevemalsam.nflbar.Models.Venue;
 import com.stevemalsam.nflbar.Models.VenueStore;
-import com.stevemalsam.nflbar.dummy.DummyContent;
 
 /**
  * A fragment representing a single Venue detail screen.
@@ -35,6 +36,7 @@ public class VenueDetailFragment extends Fragment {
     private TextView mVenueName;
     private TextView mVenueAddress;
     private TextView mVenueCity;
+    private ProgressBar mProgressBar;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,6 +64,8 @@ public class VenueDetailFragment extends Fragment {
         mVenueAddress = (TextView)rootView.findViewById(R.id.venueAddress);
         mVenueCity = (TextView)rootView.findViewById(R.id.venueCity);
 
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         updateUI();
 
@@ -70,7 +74,26 @@ public class VenueDetailFragment extends Fragment {
 
     private void updateUI() {
         if(mItem.getImageUrl() != null && !mItem.getImageUrl().isEmpty()) {
-            Picasso.with(getActivity()).load(mItem.getImageUrl()).into(mVenueImage);
+            Picasso.with(getActivity())
+                    .load(mItem.getImageUrl())
+                    .into(mVenueImage, new Callback() {
+
+                        @Override
+                        public void onSuccess() {
+                            if(mProgressBar != null) {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onError() {
+                            if(mProgressBar != null) {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+        } else {
+            mVenueImage.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.placeholder));
         }
 
         mVenueName.setText(mItem.getName());
